@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Personal files, kept only on my computer
+.claude/
+notes/
+/*.md
+!/README.md
+
+# Big files and secrets
+data/
+checkpoints/
+*.pt
+*.pth
+.env
