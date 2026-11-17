@@ -15,3 +15,8 @@ checkpoints/
 *.pt
 *.pth
 .env
+
+# Ultralytics outputs
+runs/
+weights/
+datasets/
