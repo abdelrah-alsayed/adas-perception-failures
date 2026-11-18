@@ -1,5 +1,5 @@
 CLASS_IDS = {"Car": 0, "Pedestrian": 1, "Cyclist": 2}
-DROPPED_TYPES = {"Van", "Truckk", "Tram", "Misc", "Person_sitting"}
+DROPPED_TYPES = {"Van", "Truck", "Tram", "Misc", "Person_sitting"}
 
 def is_clean(objects):
     """True if no object in the picture has a dropped type."""
