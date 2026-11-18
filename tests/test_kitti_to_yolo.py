@@ -1,3 +1,5 @@
+import pytest
+
 from explain_adas.kitti_to_yolo import is_clean, to_yolo_line
 
 
@@ -19,3 +21,8 @@ def test_yolo_line_of_the_real_pedestrian():
 def test_yolo_line_of_a_simple_box():
     line = to_yolo_line(0, [0, 0, 100, 100], 200, 200)
     assert line == "0 0.250000 0.250000 0.500000 0.500000"
+
+
+@pytest.mark.parametrize("name", ["Van", "Truck", "Tram", "Misc", "Person_sitting"])
+def test_every_dropped_type_makes_a_picture_not_clean(name):
+    assert not is_clean([{"type": name}])
