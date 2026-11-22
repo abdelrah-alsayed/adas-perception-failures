@@ -1,7 +1,8 @@
 import numpy as np
 import pytest
 
-from explain_adas.removal import case_summary, curve_area, make_orders, removal_masks
+from explain_adas.removal import (case_summary, case_summary_absolute, curve_area, make_orders,
+                                  removal_masks)
 
 
 def test_removal_masks_hide_one_more_region_in_each_row():
@@ -47,3 +48,33 @@ def test_case_summary_counts_random_orders_that_are_beaten():
     assert summary["n_random"] == 2
     assert summary["bottom_up_peak"] == pytest.approx(1.0)
     assert np.isfinite(summary["auc_random_mean"])
+
+
+def test_removal_masks_keep_a_region_that_is_not_in_the_order():
+    masks = removal_masks([2, 0], n_regions=3)    # region 1 is never hidden
+    assert masks.shape == (3, 3)
+    assert masks[2].tolist() == [0, 1, 0]
+    assert masks[:, 1].tolist() == [1, 1, 1]
+
+
+def test_make_orders_can_leave_one_region_out():
+    orders = make_orders([0.1, 0.5, -0.2, 0.3], n_random=4, seed=1, skip=1)
+    assert orders["top_down"] == [3, 0, 2]
+    assert orders["bottom_up"] == [2, 0, 3]
+    for name, order in orders.items():
+        assert sorted(order) == [0, 2, 3], name
+
+
+def test_case_summary_absolute_uses_plain_scores():
+    curves = {"top_down": [0.5, 0.0],
+              "bottom_up": [0.0, 0.8],
+              "random_0": [0.0, 0.2],
+              "random_1": [0.0, 0.6]}
+    summary = case_summary_absolute(curves)
+    assert summary["mean_top_down"] == pytest.approx(0.25)
+    # random curves have mean scores 0.1 and 0.3
+    assert summary["top_down_beats"] == 1      # only 0.3 is above top_down's 0.25
+    assert summary["bottom_up_beats"] == 2     # both are below bottom_up's 0.4
+    assert summary["f_end"] == 0.0
+    assert summary["bottom_up_peak"] == pytest.approx(0.8)
+    assert summary["n_random"] == 2
