@@ -50,6 +50,13 @@ def object_region(box, boxes):
             return i
 
 
+def case_skip(case):
+    """Region number of the object of one row of splits/cases.csv."""
+    box = read_labels(LAB.format(case["id"]))[int(case["line"])]["box"]
+    width, height = Image.open(IMG.format(case["id"])).size
+    return object_region(box, region_boxes(width, height))
+
+
 def top_k_overlap_without(a, b, skip, k):
     """Like top_k_overlap, but region `skip` is removed from both lists."""
     a, b = list(a), list(b)
@@ -81,9 +88,7 @@ def main(model="seed_0"):
     rows = []
     for (pair, role) in sorted(ks, key=lambda k: (int(k[0]), k[1])):
         case = cases[(pair, role)]
-        box = read_labels(LAB.format(case["id"]))[int(case["line"])]["box"]
-        width, height = Image.open(IMG.format(case["id"])).size
-        skip = object_region(box, region_boxes(width, height))
+        skip = case_skip(case)
         for row in compare_case(ks[(pair, role)], baseline[(pair, role)], skip):
             rows.append({"pair": pair, "role": role, **row})
     out = f"data/results/settings_check_{model}.csv"
