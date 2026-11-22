@@ -20,3 +20,5 @@ checkpoints/
 runs/
 weights/
 datasets/
+# Test runs of the KernelSHAP script (not results)
+results/*_partial.csv

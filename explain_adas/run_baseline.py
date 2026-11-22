@@ -36,8 +36,8 @@ def main(seed):
                              "full": full, "region": k, "row": k // COLS, "col": k % COLS,
                              "drop": drop})
         print("done", case["pair"], case["role"], case["id"])
-    os.makedirs("data/results", exist_ok=True)
-    with open(f"data/results/baseline_{seed}.csv", "w", newline="") as f:
+    os.makedirs("results", exist_ok=True)
+    with open(f"results/baseline_{seed}.csv", "w", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=FIELDS)
         writer.writeheader()
         writer.writerows(rows)

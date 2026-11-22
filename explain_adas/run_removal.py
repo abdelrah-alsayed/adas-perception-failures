@@ -25,15 +25,15 @@ FIELDS = ["pair", "role", "order", "k", "f"]
 def main(model_name="seed_0", mode="all"):
     """mode "all": hide any region. mode "context": never hide the object's own cell."""
     context = mode == "context"
-    maps = load_ks_maps(f"data/results/kernelshap_{model_name}.csv")
-    f_full = load_f_full(f"data/results/kernelshap_{model_name}.csv")
+    maps = load_ks_maps(f"results/kernelshap_{model_name}.csv")
+    f_full = load_f_full(f"results/kernelshap_{model_name}.csv")
     model = load_model(f"data/runs/{model_name}/weights/last.pt")
     with open("splits/cases.csv", newline="") as f:
         cases = list(csv.DictReader(f))
-    os.makedirs("data/results", exist_ok=True)
+    os.makedirs("results", exist_ok=True)
     summaries = []
     name_part = "removal_context" if context else "removal"
-    with open(f"data/results/{name_part}_{model_name}.csv", "w", newline="") as out:
+    with open(f"results/{name_part}_{model_name}.csv", "w", newline="") as out:
         writer = csv.DictWriter(out, fieldnames=FIELDS)
         writer.writeheader()
         for case in cases:

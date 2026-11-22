@@ -8,7 +8,7 @@ from explain_adas.select_cases import pick_matched_hits, pick_misses
 IMAGE_DIR = "data/kitti/data_object_image_2/training/image_2"
 LABEL_DIR = "data/kitti/data_object_label_2/training/label_2"
 WEIGHTS = "data/runs/seed_0/weights/last.pt"
-TABLE_PATH = "data/results/seed_0_val_table.csv"
+TABLE_PATH = "results/seed_0_val_table.csv"
 CASES_PATH = "splits/cases.csv"
 CASE_FIELDS = ["pair", "role", "id", "line", "type", "kind", "height",
                "occluded", "truncated", "target_score", "match"]
@@ -44,7 +44,7 @@ def case_rows(misses, pairs):
 def main():
     with open("splits/val_ids.txt") as f:
         ids = f.read().split()
-    os.makedirs("data/results", exist_ok=True)
+    os.makedirs("results", exist_ok=True)
     build_table(load_model(WEIGHTS), ids, IMAGE_DIR, LABEL_DIR, TABLE_PATH)
     rows = [r for r in read_table(TABLE_PATH) if r["eligible"]]
     misses = pick_misses(rows)

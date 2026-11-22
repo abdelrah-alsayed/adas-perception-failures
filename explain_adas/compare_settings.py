@@ -81,8 +81,8 @@ def compare_case(ks_case, baseline_case, skip):
 
 
 def main(model="seed_0"):
-    ks = load_ks_maps(f"data/results/kernelshap_{model}.csv")
-    baseline = load_baseline_maps(f"data/results/baseline_{model}.csv")
+    ks = load_ks_maps(f"results/kernelshap_{model}.csv")
+    baseline = load_baseline_maps(f"results/baseline_{model}.csv")
     with open("splits/cases.csv", newline="") as f:
         cases = {(c["pair"], c["role"]): c for c in csv.DictReader(f)}
     rows = []
@@ -91,7 +91,7 @@ def main(model="seed_0"):
         skip = case_skip(case)
         for row in compare_case(ks[(pair, role)], baseline[(pair, role)], skip):
             rows.append({"pair": pair, "role": role, **row})
-    out = f"data/results/settings_check_{model}.csv"
+    out = f"results/settings_check_{model}.csv"
     with open(out, "w", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=FIELDS)
         writer.writeheader()

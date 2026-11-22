@@ -47,9 +47,9 @@ def main(model_name, filters):
     model = load_model(f"data/runs/{model_name}/weights/last.pt")
     with open("splits/cases.csv", newline="") as f:
         cases = [c for c in csv.DictReader(f) if not wanted or f"{c['pair']}:{c['role']}" in wanted]
-    os.makedirs("data/results", exist_ok=True)
+    os.makedirs("results", exist_ok=True)
     suffix = "_base" if filters == ["base"] else "_partial" if filters else ""
-    with open(f"data/results/kernelshap_{model_name}{suffix}.csv", "w", newline="") as out:
+    with open(f"results/kernelshap_{model_name}{suffix}.csv", "w", newline="") as out:
         writer = csv.DictWriter(out, fieldnames=FIELDS)
         writer.writeheader()
         for case in cases:

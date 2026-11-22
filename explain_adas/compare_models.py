@@ -8,9 +8,9 @@ from explain_adas.compare_settings import BASE, N_REGIONS, case_skip, load_ks_ma
 
 HIT_LIMIT = 0.25  # same limit as the miss rule
 MODELS = {
-    "seed_0": "data/results/kernelshap_seed_0.csv",
-    "seed_1": "data/results/kernelshap_seed_1_base.csv",
-    "seed_2": "data/results/kernelshap_seed_2_base.csv",
+    "seed_0": "results/kernelshap_seed_0.csv",
+    "seed_1": "results/kernelshap_seed_1_base.csv",
+    "seed_2": "results/kernelshap_seed_2_base.csv",
 }
 FIELDS = ["pair", "role", "models", "flipped", "spearman", "top1_overlap", "top3_overlap",
           "top5_overlap", "top3_ctx_overlap", "top5_ctx_overlap"]
@@ -71,15 +71,15 @@ def main():
         per_model = {name: maps[name][key][BASE] for name in MODELS}
         for row in compare_models_case(per_model, case_skip(cases[key])):
             rows.append({"pair": key[0], "role": key[1], "flipped": key in flipped, **row})
-    with open("data/results/model_check.csv", "w", newline="") as f:
+    with open("results/model_check.csv", "w", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=FIELDS)
         writer.writeheader()
         writer.writerows(rows)
-    print("saved data/results/model_check.csv", len(rows), "rows")
+    print("saved results/model_check.csv", len(rows), "rows")
     print("cases where the models disagree on hit/miss:", len(flipped), "of", len(keys))
 
     # the noise floor: same model (seed_0), two KernelSHAP seeds (Step 7.2)
-    with open("data/results/settings_check_seed_0.csv", newline="") as f:
+    with open("results/settings_check_seed_0.csv", newline="") as f:
         noise = [r for r in csv.DictReader(f) if r["comparison"] == "ks_seed_2"]
     noise_flipped = [r for r in noise if (r["pair"], r["role"]) in flipped]
 
