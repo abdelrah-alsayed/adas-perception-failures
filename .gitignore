@@ -22,3 +22,6 @@ weights/
 datasets/
 # Test runs of the KernelSHAP script (not results)
 results/*_partial.csv
+
+# Maps with KITTI pictures (license: do not publish)
+results/maps/

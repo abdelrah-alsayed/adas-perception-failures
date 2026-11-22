@@ -1,0 +1,8 @@
+cases,comparison,n,rho,top-1 same,top-3,top-5,ctx top-3,ctx top-5
+all 20 cases,"noise floor: same model, other KernelSHAP seed",20,0.75,95%,3.00,4.00,2.00,3.00
+all 20 cases,different models (3 pairs x 20 cases),60,0.41,100%,2.00,3.00,1.50,2.00
+all 20 cases,  seed_0 vs seed_1,20,0.40,100%,2.00,3.00,1.00,2.00
+all 20 cases,  seed_0 vs seed_2,20,0.45,100%,2.00,3.00,2.00,2.00
+all 20 cases,  seed_1 vs seed_2,20,0.37,100%,2.00,3.00,2.00,2.00
+4 flipped cases,"noise floor: same model, other KernelSHAP seed",4,0.85,100%,2.50,4.00,2.00,3.50
+4 flipped cases,different models,12,0.24,100%,2.00,2.00,1.00,1.00

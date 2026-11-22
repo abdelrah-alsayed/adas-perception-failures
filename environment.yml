@@ -11,5 +11,6 @@ dependencies:
       - torchvision==0.29.1+cu132
       - ultralytics==8.4.215
       - shap==0.54.1
+      - matplotlib==3.11.2
 
 
