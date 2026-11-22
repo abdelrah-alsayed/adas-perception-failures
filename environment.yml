@@ -10,5 +10,6 @@ dependencies:
       - torch==2.14.1+cu132
       - torchvision==0.29.1+cu132
       - ultralytics==8.4.215
+      - shap==0.54.1
 
 
