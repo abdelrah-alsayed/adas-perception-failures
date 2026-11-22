@@ -15,3 +15,6 @@ def test_compare_case_gives_one_row_per_comparison():
     assert rows["budget_1000"]["spearman"] == -1.0
     assert rows["budget_1000"]["top3_overlap"] == 0
     assert rows["hide_one_blur"]["top3_overlap"] == 3
+    assert rows["ks_seed_2"]["top1_overlap"] == 1
+    assert rows["budget_1000"]["top1_overlap"] == 0
+    assert rows["ks_seed_2"]["top5_overlap"] == 5

@@ -12,7 +12,9 @@ COMPARISONS = {
     "budget_1000": ("blur", 1, 1000),
     "grey_mask": ("grey", 1, 2000),
 }
-FIELDS = ["pair", "role", "comparison", "spearman", "top3_overlap"]
+KS = (1, 3, 5)  # fixed before looking at results (decided 2026-11-22)
+N_REGIONS = 30
+FIELDS = ["pair", "role", "comparison", "spearman", "top1_overlap", "top3_overlap", "top5_overlap"]
 
 
 def load_ks_maps(path):
@@ -41,9 +43,10 @@ def compare_case(ks_case, baseline_case):
     others["hide_one_blur"] = baseline_case["blur"]
     result = []
     for name, other in others.items():
-        result.append({"comparison": name,
-                       "spearman": rank_correlation(base, other),
-                       "top3_overlap": top_k_overlap(base, other, k=3)})
+        row = {"comparison": name, "spearman": rank_correlation(base, other)}
+        for k in KS:
+            row[f"top{k}_overlap"] = top_k_overlap(base, other, k=k)
+        result.append(row)
     return result
 
 
@@ -61,14 +64,18 @@ def main(model="seed_0"):
         writer.writerows(rows)
     print("saved", out, len(rows), "rows")
 
-    print(f"{'comparison':<15}{'role':<6}{'median rho':>11}{'min rho':>9}{'median top3':>13}{'nan':>5}")
+    print("chance level (two random lists share on average):",
+          ", ".join(f"top{k} {k * k / N_REGIONS:.2f}" for k in KS))
+    print(f"{'comparison':<15}{'role':<6}{'median rho':>11}{'top1 same':>10}{'top3 med':>10}{'top5 med':>10}{'nan':>5}")
     for name in [*COMPARISONS, "hide_one_blur"]:
         for role in ("miss", "hit"):
             sel = [r for r in rows if r["comparison"] == name and r["role"] == role]
             rho = np.array([r["spearman"] for r in sel])
-            top3 = [r["top3_overlap"] for r in sel]
-            print(f"{name:<15}{role:<6}{np.nanmedian(rho):>11.2f}{np.nanmin(rho):>9.2f}"
-                  f"{np.median(top3):>13.1f}{int(np.isnan(rho).sum()):>5}")
+            top1 = np.mean([r["top1_overlap"] for r in sel])
+            top3 = np.median([r["top3_overlap"] for r in sel])
+            top5 = np.median([r["top5_overlap"] for r in sel])
+            print(f"{name:<15}{role:<6}{np.nanmedian(rho):>11.2f}{top1:>10.0%}{top3:>10.1f}{top5:>10.1f}"
+                  f"{int(np.isnan(rho).sum()):>5}")
 
 
 if __name__ == "__main__":
