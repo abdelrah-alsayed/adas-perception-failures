@@ -5,6 +5,7 @@ Maps with KITTI pictures go to results/maps/ and are NOT committed (license).
 """
 import csv
 import os
+import shutil
 
 import matplotlib
 matplotlib.use("Agg")
@@ -24,9 +25,12 @@ IMG = "data/kitti/data_object_image_2/training/image_2/{}.png"
 LAB = "data/kitti/data_object_label_2/training/label_2/{}.txt"
 FIGURES_DIR = "results/figures"
 MAPS_DIR = "results/maps"
+SHARED_DIR = "results/maps_shared"   # the few maps with KITTI pictures that are committed (see ATTRIBUTION.md there)
+SHARED_MAPS = ["case_05_miss.png", "case_05_hit.png", "case_06_miss.png", "case_06_hit.png",
+               "maps_three_models_flipped_cases.png"]
 SEED_2_SETTING = ("blur", 2, 2000)
 UNSTABLE = [("3", "miss"), ("4", "hit"), ("5", "hit")]       # least stable in the settings check
-FLIPPED_EXAMPLES = [("5", "miss"), ("4", "miss")]            # miss for seed 0, hit for another copy
+FLIPPED_EXAMPLES = [("5", "miss"), ("4", "miss"), ("6", "miss")]   # miss for seed 0, hit for another copy
 
 
 def median_curves(curves, role):
@@ -172,6 +176,18 @@ def make_map_figures(cases):
     return written
 
 
+def copy_shared(source_dir, target_dir, names):
+    """Copy the maps that may be shared. Return the names that were copied."""
+    os.makedirs(target_dir, exist_ok=True)
+    copied = []
+    for name in names:
+        source = os.path.join(source_dir, name)
+        if os.path.exists(source):
+            shutil.copy2(source, os.path.join(target_dir, name))
+            copied.append(name)
+    return copied
+
+
 def read_cases(path="splits/cases.csv"):
     with open(path, newline="") as f:
         return list(csv.DictReader(f))
@@ -188,6 +204,7 @@ def make_figures():
     cases = read_cases()
     if pictures_available(cases):
         written += make_map_figures(cases)
+        copy_shared(MAPS_DIR, SHARED_DIR, SHARED_MAPS)
     else:
         print("KITTI pictures not found: the map figures were skipped (see README).")
     return written

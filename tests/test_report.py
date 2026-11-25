@@ -1,6 +1,6 @@
 import numpy as np
 
-from explain_adas.report_figures import median_curves
+from explain_adas.report_figures import copy_shared, median_curves
 from explain_adas.report_tables import (curves_from_csv, removal_summaries, show, summary_cells,
                                         to_markdown)
 
@@ -46,3 +46,13 @@ def test_median_curves_takes_the_median_over_cases():
     result = median_curves(curves, "hit")
     assert np.allclose(result["top_down"], [1.0, 0.2])
     assert np.allclose(result["random (mean of 20)"], [1.0, 0.7])
+
+
+def test_copy_shared_copies_only_the_named_files_that_exist(tmp_path):
+    source, target = tmp_path / "maps", tmp_path / "shared"
+    source.mkdir()
+    (source / "a.png").write_bytes(b"a")
+    (source / "b.png").write_bytes(b"b")
+    copied = copy_shared(str(source), str(target), ["a.png", "missing.png"])
+    assert copied == ["a.png"]
+    assert sorted(p.name for p in target.iterdir()) == ["a.png"]
