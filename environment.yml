@@ -1,8 +1,10 @@
+# Pinned versions of the libraries that touch our numbers (as installed on the author's machine).
+# This is not a full lock file: other packages are chosen by pip/conda.
 name: adas
 channels:
   - conda-forge
 dependencies:
-  - python=3.12
+  - python=3.12.16
   - pytest=9.2.0
   - pip
   - pip:
@@ -12,5 +14,9 @@ dependencies:
       - ultralytics==8.4.215
       - shap==0.54.1
       - matplotlib==3.11.2
-
-
+      - numpy==2.5.4
+      - scipy==1.18.1
+      - pandas==3.1.1
+      - scikit-learn==1.9.1
+      - pillow==13.0.0
+      - opencv-python==5.1.0.95
