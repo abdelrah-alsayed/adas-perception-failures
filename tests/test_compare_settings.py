@@ -1,6 +1,8 @@
+import pytest
+
 from explain_adas.compare import top_k_overlap
-from explain_adas.compare_settings import (BASE, COMPARISONS, compare_case, object_region,
-                                          top_k_overlap_without)
+from explain_adas.compare_settings import (BASE, COMPARISONS, NOISE_FLOOR_BUDGET_1000, compare_case,
+                                          object_region, top_k_overlap_without)
 
 
 def test_compare_case_gives_one_row_per_comparison():
@@ -9,10 +11,11 @@ def test_compare_case_gives_one_row_per_comparison():
     ks_case = {BASE: same,
                COMPARISONS["ks_seed_2"]: same,
                COMPARISONS["budget_1000"]: flipped,
-               COMPARISONS["grey_mask"]: same}
+               COMPARISONS["grey_mask"]: same,
+               NOISE_FLOOR_BUDGET_1000[2]: same}        # seed 2 at budget 1,000
     baseline_case = {"blur": same}
     rows = {r["comparison"]: r for r in compare_case(ks_case, baseline_case, skip=0)}
-    assert set(rows) == {"ks_seed_2", "budget_1000", "grey_mask", "hide_one_blur"}
+    assert set(rows) == {"ks_seed_2", "budget_1000", "grey_mask", "hide_one_blur", "ks_seed_2_budget_1000"}
     assert rows["ks_seed_2"]["spearman"] == 1.0
     assert rows["budget_1000"]["spearman"] == -1.0
     assert rows["budget_1000"]["top3_overlap"] == 0
@@ -20,6 +23,9 @@ def test_compare_case_gives_one_row_per_comparison():
     assert rows["ks_seed_2"]["top1_overlap"] == 1
     assert rows["budget_1000"]["top1_overlap"] == 0
     assert rows["ks_seed_2"]["top5_overlap"] == 5
+    # the noise floor at 1,000 compares seed 1 (flipped here) with seed 2 (same here), not with the base
+    assert rows["ks_seed_2_budget_1000"]["spearman"] == pytest.approx(-1.0)
+    assert rows["ks_seed_2_budget_1000"]["top3_overlap"] == 0
 
 
 def test_overlap_without_skips_the_object_region():

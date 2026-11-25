@@ -8,6 +8,8 @@
 | KernelSHAP seed 2 (noise floor) | hit | 10 | 0.71 | 90% | 3.00 | 4.00 | 2.50 | 4.00 |
 | budget 1000 | miss | 10 | 0.69 | 100% | 2.00 | 4.00 | 2.00 | 3.00 |
 | budget 1000 | hit | 10 | 0.64 | 90% | 3.00 | 4.00 | 3.00 | 4.00 |
+| seed 1 vs seed 2 at budget 1000 (noise floor at 1000) | miss | 10 | 0.68 | 100% | 2.00 | 3.00 | 2.00 | 2.00 |
+| seed 1 vs seed 2 at budget 1000 (noise floor at 1000) | hit | 10 | 0.62 | 100% | 3.00 | 4.00 | 3.00 | 4.00 |
 | grey masking | miss | 10 | 0.77 | 100% | 2.00 | 4.00 | 2.00 | 3.00 |
 | grey masking | hit | 10 | 0.71 | 100% | 2.00 | 4.00 | 2.00 | 3.50 |
 | hide-one baseline | miss | 10 | 0.56 | 80% | 2.00 | 2.00 | 1.00 | 2.00 |

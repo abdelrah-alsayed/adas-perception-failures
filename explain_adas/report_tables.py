@@ -14,6 +14,7 @@ REMOVAL_CSVS = {"all regions": "results/removal_seed_0.csv",
                 "context only": "results/removal_context_seed_0.csv"}
 COMPARISON_NAMES = {"ks_seed_2": "KernelSHAP seed 2 (noise floor)",
                     "budget_1000": "budget 1000",
+                    "ks_seed_2_budget_1000": "seed 1 vs seed 2 at budget 1000 (noise floor at 1000)",
                     "grey_mask": "grey masking",
                     "hide_one_blur": "hide-one baseline"}
 SUMMARY_HEADER = ["n", "rho", "top-1 same", "top-3", "top-5", "ctx top-3", "ctx top-5"]
