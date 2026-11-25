@@ -8,6 +8,7 @@ __pycache__/
 notes/
 /*.md
 !/README.md
+!/report.md
 
 # Big files and secrets
 data/
